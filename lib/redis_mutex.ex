@@ -63,7 +63,7 @@ defmodule RedisMutex do
     import Supervisor.Spec, warn: false
 
     opts = [strategy: :one_for_one, name: RedisMutex.Supervisor]
-    Supervisor.start_link(children(Mix.env), opts)
+    Supervisor.start_link(children(Mix.env()), opts)
   end
 
   def children(:test) do
@@ -74,17 +74,19 @@ defmodule RedisMutex do
     import Supervisor.Spec, warn: false
 
     redis_url = Application.get_env(:redis_mutex, :redis_url)
+
     [
       worker(RedisMutex.Connection, [:redis_mutex_connection, redis_url])
     ]
   end
 
   defmacro __using__(_opts) do
-    case Mix.env do
+    case Mix.env() do
       :test ->
         quote do
           import RedisMutex.LockMock, warn: false
         end
+
       _ ->
         quote do
           import RedisMutex.Lock, warn: false

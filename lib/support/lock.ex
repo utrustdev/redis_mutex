@@ -1,5 +1,4 @@
 defmodule RedisMutex.LockMock do
-
   @default_timeout :timer.seconds(40)
   @expiry :timer.seconds(20)
 

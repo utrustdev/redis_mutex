@@ -7,17 +7,16 @@ defmodule RedisMutex.Lock do
   will handle the logic for setting and removing key/values in Redis.
   """
 
-  defredis_script :unlock_script, """
+  defredis_script(:unlock_script, """
   if redis.call("get", KEYS[1]) == ARGV[1] then
     return redis.call("del", KEYS[1])
   else
     return 0
   end
-  """
+  """)
 
   @default_timeout :timer.seconds(40)
   @expiry :timer.seconds(20)
-
 
   @doc """
     This macro takes in a key and a timeout.
@@ -78,11 +77,13 @@ defmodule RedisMutex.Lock do
   or the timeout expires.
   """
   def take_lock(key, uuid, timeout \\ @default_timeout, start \\ nil, finish \\ nil)
+
   def take_lock(key, uuid, timeout, nil, nil) do
-    start = Timex.now
+    start = Timex.now()
     finish = Timex.shift(start, milliseconds: timeout)
     take_lock(key, uuid, timeout, start, finish)
   end
+
   def take_lock(key, uuid, timeout, start, finish) do
     if Timex.before?(finish, start) do
       raise RedisMutex.Error, message: "Unable to obtain lock."
@@ -107,7 +108,6 @@ defmodule RedisMutex.Lock do
       :undefined -> false
     end
   end
-
 
   @doc """
   This function takes in the key/value pair that are to be released in Redis
