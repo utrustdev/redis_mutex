@@ -54,7 +54,7 @@ defmodule RedisMutex.Lock do
     ```
   """
 
-  @spec with_lock(any, integer) :: any
+  @spec with_lock(any(), integer()) :: {boolean(), any()}
   defmacro with_lock(key, timeout \\ @default_timeout, do: clause) do
     quote do
       key = unquote(key)
@@ -65,9 +65,9 @@ defmodule RedisMutex.Lock do
 
       block_value = unquote(clause)
 
-      RedisMutex.Lock.unlock(key, uuid)
+      unlock = RedisMutex.Lock.unlock(key, uuid)
 
-      block_value
+      {unlock, block_value}
     end
   end
 
