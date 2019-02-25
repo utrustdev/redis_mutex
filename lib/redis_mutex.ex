@@ -81,19 +81,16 @@ defmodule RedisMutex do
   end
 
   defmacro __using__(_opts) do
-    #case Mix.env() do
-    #  :test ->
-    #    quote do
-    #      import RedisMutex.LockMock, warn: false
-    #    end
-    #
-    #  _ ->
-    #    quote do
-    #      import RedisMutex.Lock, warn: false
-    #    end
-    #end
-    quote do
-      import RedisMutex.Lock, warn: false
+    case Mix.env() do
+      :test ->
+        quote do
+          import RedisMutex.LockMock, warn: false
+        end
+
+      _ ->
+        quote do
+          import RedisMutex.Lock, warn: false
+        end
     end
   end
 end
