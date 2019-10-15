@@ -61,11 +61,11 @@ defmodule RedisMutex.Lock do
       key = unquote(key)
       timeout = unquote(timeout)
       uuid = UUID.uuid4()
-      Logger.debug "Taking lock with uuid: #{uuid}"
+      Logger.debug("Taking lock with uuid: #{uuid}")
       RedisMutex.Lock.take_lock(key, uuid, timeout)
 
       block_value = unquote(clause)
-      Logger.debug "Releasing lock with uuid: #{uuid}"
+      Logger.debug("Releasing lock with uuid: #{uuid}")
       unlock = RedisMutex.Lock.unlock(key, uuid)
 
       {unlock, block_value}
