@@ -36,7 +36,7 @@ defmodule RedisMutex.Mixfile do
       {:ex_doc, "~> 0.18.1", only: :dev},
       {:exredis, "~> 0.3"},
       {:timex, "~> 3.5"},
-      {:uuid, "~> 1.1.8"}
+      {:elixir_uuid, "~> 1.2"}
     ]
   end
 
